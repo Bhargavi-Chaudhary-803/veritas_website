@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal-dark: #006d77;
+      --teal-light: #83c5be;
+      --mint: #c7f2d1;
+      --off-white: #edf6f9;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at center, #679fa4, #327275, #0f4449, #001417);
+      color: var(--off-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+      color: var(--mint);
+    }
+
+    .home-logo {
+        width: 15px;
+        height: 15px;
+    }
+
+    nav {
+  background: #ffffff0d;
+  backdrop-filter: blur(10px);
+  border-radius: 60px;
+  font-weight: bolder;
+  padding: 0.4rem 4rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 60px;
+  border: 2px solid #EDF6F9;
+  max-width: 90vw;
+  width: 100%;
+  position: relative; /* ✅ semicolon added here */
+  z-index: 200;
+  transition: all 0.3s ease-in-out;
+}
+
+    nav a {
+      color: var(--off-white);
+      text-decoration: none;
+      padding: 8px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #EDF6F9;
+     
+    }
+
+    nav a img {
+      width: 20px;
+      height: 20px;
+      transition: all 0.3s ease;
+      vertical-align: middle;
+  display: inline-block;
+  margin-bottom: -2px;
+  transition: all 0.3s ease;
+    }
+
+    nav a:hover img,
+    nav a.active img {
+      filter: drop-shadow(0 0 8px #EDF6F9);
+    }
+
+nav.floating {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--mint);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+    .hero {
+      text-align: center;
+      max-width: 900px;
+      margin-top: 40px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .subhead {
+      font-size: 1.3rem;
+      font-weight: 500;
+      line-height: 2;
+      margin-bottom: 40px;
+      opacity: 0.95;
+      max-width: 1000px;
+      text-align: center;
+      color: var(--off-white);
+    }
+
+    .subhead.typing::after {
+      content: '|';
+      display: inline-block;
+      margin-left: 2px;
+      animation: blink-caret 1s step-end infinite;
+    }
+
+    @keyframes blink-caret {
+      from, to { color: transparent; }
+      50% { color: var(--mint); }
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 15px 40px;
+      border: 2px solid var(--teal-light);
+      border-radius: 50px;
+      background-color: var(--teal-dark);
+      color: var(--off-white);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 0 12px var(--teal-light), 0 0 20px rgba(199, 242, 209, 0.4);
+      transition: background-color 0.4s ease-out, box-shadow 0.4s ease-out, border-color 0.4s ease-out;
+    }
+
+    .cta-button:hover {
+      background-color: var(--teal-light);
+      color: var(--teal-dark);
+      box-shadow: 0 0 20px var(--mint), 0 0 40px var(--teal-light);
+      border-color: var(--mint);
+    }
+
+    .scroll-box {
+      width: 300px;
+      overflow: hidden;
+      border: 2px solid var(--mint);
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--off-white);
+    }
+
+    .scroll-text {
+      display: inline-block;
+      white-space: nowrap;
+      transition: transform 0.2s ease-out;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 0.6rem 1rem;
+        gap: 10px;
+      }
+
+      nav a {
+        font-size: 16px;
+        padding: 6px 12px;
+      }
+
+      #floating-image {
+        display: none;
+      }
+    }
+
+.image-column, .text-column {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.image-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-wrapper {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 30px var(--teal-light);
+    border: 3px solid var(--teal-light);
+}
+
+#animated-main-image {
+    display: block;
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    /* Apply floating animation */
+    animation: float 6s ease-in-out infinite;
+}
+
+.image-caption {
+    text-align: center;
+    color: var(--teal-light);
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.text-column {
+    line-height: 1.8;
+}
+
+.about-paragraph {
+    font-size: 1.1rem;
+    color: var(--off-white);
+    margin-bottom: 20px;
+}
+
+.highlight {
+    font-weight: 600;
+    color: var(--teal-light);
+    padding: 10px;
+    border-left: 4px solid var(--mint);
+    background-color: rgba(0, 109, 119, 0.1); /* Slightly transparent dark teal */
+}
+
+.about-subtitle {
+    font-size: 1.5rem;
+    color: var(--mint);
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.feature-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 25px;
+}
+
+.feature-list li {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: var(--off-white);
+    font-weight: 500;
+}
+
+.list-icon {
+    color: var(--mint);
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.about-cta {
+    margin-top: 20px;
+    background-color: var(--teal-light); /* Reversed colors for emphasis */
+    color: var(--teal-dark);
+    border-color: var(--mint);
+    box-shadow: 0 0 15px var(--mint);
+}
+
+.about-cta:hover {
+    background-color: var(--teal-dark);
+    color: var(--mint);
+    box-shadow: 0 0 25px var(--teal-light), 0 0 50px var(--mint);
+    border-color: var(--teal-light);
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translatey(0px); box-shadow: 0 0 30px var(--teal-light); }
+    50% { transform: translatey(-15px); box-shadow: 0 0 50px var(--mint); }
+    100% { transform: translatey(0px); box-shadow: 0 0 30px var(--teal-light); }
+}
+
+@keyframes pulse-glow {
+    0% { opacity: 0.7; text-shadow: 0 0 5px var(--mint); }
+    50% { opacity: 1; text-shadow: 0 0 15px var(--teal-light), 0 0 25px var(--mint); }
+    100% { opacity: 0.7; text-shadow: 0 0 5px var(--mint); }
+}
+
+/* Veritas Logo Text Animation */
+.logo-text-animated-container {
+    margin-top: 50px;
+}
+
+.logo-veritas-text {
+    font-family: 'Raleway', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: 10px;
+    color: var(--off-white);
+    opacity: 0.8;
+    animation: pulse-glow 3s ease-in-out infinite;
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    transition: all 0.5s ease;
+}
+
+@media (max-width: 600px) {
+    .about-title {
+        font-size: 2rem;
+    }
+    .logo-veritas-text {
+        font-size: 2.5rem;
+        letter-spacing: 5px;
+    }
+    #animated-main-image {
+        width: 250px;
+        height: 250px;
+    }
+    .image-wrapper {
+        box-shadow: 0 0 15px var(--teal-light);
+    }
+}
+
+#floating-nav {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 50px;
+  border: 2px solid var(--mint);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+  padding: 0.6rem 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+/* Visible (when you scroll past main nav) */
+#floating-nav.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+
+.video-background-local {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#bgVideo {
+    position: absolute;
+width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.7;
+  mix-blend-mode: lighten;
+  background-color: black;
+
+  /* 🧊 Combine top-bottom + left-right fades */
+  -webkit-mask-image: 
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,     /* fade from top */
+      rgba(0, 0, 0, 1) 20%,    /* visible section */
+      rgba(0, 0, 0, 1) 80%,    /* visible section ends */
+      rgba(0, 0, 0, 0) 100%    /* fade at bottom */
+    ),
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0%,     /* fade from left */
+      rgba(0, 0, 0, 1) 15%,    /* visible section */
+      rgba(0, 0, 0, 1) 85%,    /* visible section ends */
+      rgba(0, 0, 0, 0) 100%    /* fade at right */
+    );
+
+  mask-image:
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 20%,
+      rgba(0, 0, 0, 1) 80%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 15%,
+      rgba(0, 0, 0, 1) 85%,
+      rgba(0, 0, 0, 0) 100%
+    );
+
+  -webkit-mask-composite: intersect;
+  mask-composite: intersect;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: cover, cover;
+  mask-size: cover, cover;
+  filter:blur(2px);
+}
+
+
+.gradient-overlay-local {
+position: absolute;
+top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+opacity: 70%; 
+/* FIX: Set to 1 so it sits above the video (-1) and below the content */
+z-index: 1; 
+}
+
+#hero-section {
+
+    position: relative; 
+    min-height: 100vh;
+width: 100%;
+z-index: 10; 
+display: flex;
+flex-direction: column;
+align-items: center;
+padding-top: 20px; /* Adjust as needed */
+}
+
+ .problem-solution {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(100, 244, 171, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .card:hover::before {
+      left: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(1, 30, 16, 0.3);
+      box-shadow: 0 20px 40px rgb(255, 255, 255);
+    }
+
+    .card h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #b6e5dd;
+    }
+
+    .card p {
+      color: #ffffff;
+      line-height: 1.8;
+      font-size: 1.05rem;
+    }
+
+    .features {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 4.6rem;
+      margin-bottom: 60px;
+      background: radial-gradient( #a8ede9, #ffffff, #9ac5c2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+   
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: rgba(67, 196, 194, 0.653);
+      border: 1px solid rgb(19, 83, 78);
+        border-radius: 20px;
+      padding: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+
+
+    .feature-card:hover {
+      background: rgb(32, 140, 142);
+      border-color: rgba(1, 28, 26, 0.133);
+    }
+
+
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #074343, #408b97);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .feature-card p {
+      color: #9df3f3;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    .interactive-demo {
+      max-width: 900px;
+      margin: 80px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .interactive-demo h2 {
+      font-size: 3.6rem;
+      margin-bottom: 40px;
+      background: radial-gradient( #a8ede9, #ffffff, #9ac5c2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 40px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 85%;
+      background: #ffffff;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+      position: relative;
+      opacity: 0;
+      animation: slideIn 0.6s ease forwards;
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.8s; }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .timeline-item:nth-child(odd) {
+      flex-direction: row-reverse;
+    }
+
+    .timeline-content {
+      flex: 1;
+      padding: 20px 40px;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content {
+      text-align: left;
+    }
+
+    .timeline-item:nth-child(even) .timeline-content {
+      text-align: right;
+    }
+
+    .timeline-number {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #62d8cc, #0e5462);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #000000;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    .timeline-content h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #62d8cc;
+    }
+
+    .timeline-content p {
+      color: #e7feff;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+      .problem-solution {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline::before {
+        left: 30px;
+      }
+
+      .timeline-item,
+      .timeline-item:nth-child(odd) {
+        flex-direction: row;
+      }
+
+      .timeline-content,
+      .timeline-item:nth-child(odd) .timeline-content,
+      .timeline-item:nth-child(even) .timeline-content {
+        text-align: left;
+        padding-left: 80px;
+      }
+
+      .timeline-number {
+        position: absolute;
+        left: 0;
+      }
+    
+      #new-element {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* adjust spacing before challenge card */
+}
+
+#graphic {
+  width: 850px;        /* adjust as needed */
+  height: auto;
+  position: absolute;
+  top: -50px;
+  left: 200px;
+  z-index: 10;         /* ensures visibility above backgrounds */
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+  
+}
+
+
+#new-element-2 {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px; /* adjust spacing before challenge card */
+}
+
+#graphic-2 {
+  width: 200px;        /* adjust as needed */
+  height: auto;
+  position: absolute;
+  top: -250px;
+  left: 950px;
+  z-index: 10;         /* ensures visibility above backgrounds */
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+  animation: gentleFloat 2s ease-in-out infinite alternate;
+}
+
+@keyframes gentleFloat {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(8px, 8px) rotate(5deg); /* Moves slightly and rotates */
+    }
+}
+
+#new-element-3 {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px; /* adjust spacing before challenge card */
+}
+
+#graphic-3 {
+  width: 200px;        /* adjust as needed */
+  height: auto;
+  position: absolute;
+  top: 95px;
+  left: 500px;
+  z-index: 10;         /* ensures visibility above backgrounds */
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+  animation: gentleFloat 2s ease-in-out infinite alternate;
+}
+
+@keyframes gentleFloat {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(8px, 8px) rotate(5deg); /* Moves slightly and rotates */
+    }
+}
+
+#new-element-4 {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px; /* adjust spacing before challenge card */
+}
+
+#graphic-4 {
+  width: 200px;        /* adjust as needed */
+  height: auto;
+  position: relative;
+  top: 60px;
+  left: 45px;
+  z-index: 10;         /* ensures visibility above backgrounds */
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+  animation: gentleFloat 2s ease-in-out infinite alternate-reverse;
+}
+@keyframes gentleFloat {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(2px, 2px) rotate(5deg); /* Moves slightly and rotates */
+    }
+}
+
+  </style>
+</head>
+<body>
+  
+<section id="hero-section">
+
+    <div class="video-background-local">
+    <video autoplay muted loop id="bgVideo">
+                <source src="C:\Users\Bhargavi Chaudhary\OneDrive\Desktop\Bhargavi_Codes\Hackx\Untitled design (2).mp4" type="video/mp4"> 
+        Your browser does not support the video tag.
+    </video>
+        <div class="gradient-overlay-local"></div>
+</div>
+
+  <div> 
+    <img src="C:\Users\Bhargavi Chaudhary\OneDrive\Desktop\Bhargavi_Codes\Hackx\main_logo.png" alt="Logo" width="150" height="30">
+  </div>
+  <br>
+
+  <nav>
+    <a href="#home"><img class="home-logo" src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20stroke%3D%22%23ffffff%22%3E%3Cg%20id%3D%22SVGRepo_bgCarrier%22%20stroke-width%3D%220%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_tracerCarrier%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_iconCarrier%22%3E%20%3Cpath%20d%3D%22M1%206V15H6V11C6%209.89543%206.89543%209%208%209C9.10457%209%2010%209.89543%2010%2011V15H15V6L8%200L1%206Z%22%20fill%3D%22%23ffffff%22%3E%3C%2Fpath%3E%20%3C%2Fg%3E%3C%2Fsvg%3E" alt="Home" width="48" height="48">Home</a>
+    <a href="#about"><img src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20512%20512%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20fill%3D%22%23000000%22%3E%3Cg%20id%3D%22SVGRepo_bgCarrier%22%20stroke-width%3D%220%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_tracerCarrier%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_iconCarrier%22%3E%20%3Ctitle%3Eabout-filled%3C%2Ftitle%3E%20%3Cg%20id%3D%22Page-1%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%20%3Cg%20id%3D%22drop%22%20fill%3D%22%23ffffff%22%20transform%3D%22translate(42.666667%2C%2042.666667)%22%3E%20%3Cpath%20d%3D%22M213.333333%2C3.55271368e-14%20C331.154987%2C3.55271368e-14%20426.666667%2C95.51168%20426.666667%2C213.333333%20C426.666667%2C331.153707%20331.154987%2C426.666667%20213.333333%2C426.666667%20C95.51296%2C426.666667%203.55271368e-14%2C331.153707%203.55271368e-14%2C213.333333%20C3.55271368e-14%2C95.51168%2095.51296%2C3.55271368e-14%20213.333333%2C3.55271368e-14%20Z%20M234.713387%2C192%20L192.04672%2C192%20L192.04672%2C320%20L234.713387%2C320%20L234.713387%2C192%20Z%20M213.55008%2C101.333333%20C197.99616%2C101.333333%20186.713387%2C112.5536%20186.713387%2C127.704107%20C186.713387%2C143.46752%20197.698773%2C154.666667%20213.55008%2C154.666667%20C228.785067%2C154.666667%20240.04672%2C143.46752%20240.04672%2C128%20C240.04672%2C112.5536%20228.785067%2C101.333333%20213.55008%2C101.333333%20Z%22%20id%3D%22Shape%22%3E%20%3C%2Fpath%3E%20%3C%2Fg%3E%20%3C%2Fg%3E%20%3C%2Fg%3E%3C%2Fsvg%3E" alt="About">About</a>
+    <a href="#veritas"><img src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20512%20512%22%20id%3D%22Layer_1%22%20version%3D%221.1%22%20xml%3Aspace%3D%22preserve%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20fill%3D%22%23000000%22%3E%3Cg%20id%3D%22SVGRepo_bgCarrier%22%20stroke-width%3D%220%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_tracerCarrier%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_iconCarrier%22%3E%20%3Cstyle%20type%3D%22text%2Fcss%22%3E%20.st0%7Bfill%3A%23ffffff%3B%7D%20.st1%7Bfill%3A%23ffffff%3B%7D%20%3C%2Fstyle%3E%20%3Cg%3E%20%3Cg%3E%20%3Cg%3E%20%3Cpolygon%20class%3D%22st1%22%20points%3D%22288.6%2C176.6%20223.4%2C176.6%20223.4%2C219.9%20180.1%2C219.9%20180.1%2C285.2%20223.4%2C285.2%20223.4%2C328.5%20288.6%2C328.5%20288.6%2C285.2%20332%2C285.2%20332%2C219.9%20288.6%2C219.9%20%22%3E%3C%2Fpolygon%3E%20%3C%2Fg%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M441.2%2C114.2c-6.3%2C1.4-12.8%2C2.1-19.5%2C2.1c-48.4%2C0-87.7-38.6-87.7-86.3H177.9c0%2C47.6-39.3%2C86.3-87.7%2C86.3%20c-6.7%2C0-13.2-0.7-19.5-2.1C13.9%2C354%2C256%2C482%2C256%2C482S498.1%2C354%2C441.2%2C114.2z%20M339.5%2C361.8c-30.5%2C35.4-63.4%2C59.9-83.4%2C73.2%20c-20.5-13.6-54.4-38.9-85.1-75c-41.7-49.1-64.5-102-68.1-157.9h30.5c3.9%2C0%2C7-3.1%2C7-7c0-3.9-3.1-7-7-7h-31%20c-0.1-10.7%2C0.5-21.4%2C1.8-32.3c50.2-5.4%2C91.8-39.6%2C107.3-85.6h89.1c15.6%2C45.9%2C57.2%2C80.2%2C107.3%2C85.6%20C416.6%2C229.7%2C393.7%2C298.9%2C339.5%2C361.8z%22%3E%3C%2Fpath%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M159.9%2C192.3c-0.2-0.4-0.4-0.8-0.6-1.2c-0.3-0.4-0.6-0.7-0.9-1.1c-0.3-0.3-0.7-0.6-1.1-0.9%20c-0.4-0.3-0.8-0.5-1.2-0.6c-0.4-0.2-0.9-0.3-1.3-0.4c-0.9-0.2-1.8-0.2-2.7%2C0c-0.4%2C0.1-0.9%2C0.2-1.3%2C0.4c-0.4%2C0.2-0.8%2C0.4-1.2%2C0.6%20c-0.4%2C0.3-0.7%2C0.6-1.1%2C0.9c-0.3%2C0.3-0.6%2C0.7-0.9%2C1.1c-0.3%2C0.4-0.5%2C0.8-0.7%2C1.2c-0.2%2C0.4-0.3%2C0.9-0.4%2C1.3c-0.1%2C0.5-0.1%2C0.9-0.1%2C1.4%20c0%2C1.8%2C0.7%2C3.6%2C2.1%2C4.9c0.3%2C0.3%2C0.7%2C0.6%2C1.1%2C0.9s0.8%2C0.5%2C1.2%2C0.7c0.4%2C0.2%2C0.9%2C0.3%2C1.3%2C0.4c0.4%2C0.1%2C0.9%2C0.1%2C1.4%2C0.1%20c0.5%2C0%2C0.9%2C0%2C1.4-0.1c0.4-0.1%2C0.9-0.2%2C1.3-0.4c0.4-0.2%2C0.8-0.4%2C1.2-0.7c0.4-0.3%2C0.7-0.5%2C1.1-0.9c1.3-1.3%2C2-3.1%2C2-4.9%20c0-0.4%2C0-0.9-0.1-1.4C160.2%2C193.2%2C160%2C192.8%2C159.9%2C192.3z%22%3E%3C%2Fpath%3E%20%3C%2Fg%3E%20%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Product">Veritas</a>
+    <a href="#team"><img src="data:image/svg+xml,%3Csvg%20height%3D%22200px%22%20width%3D%22200px%22%20version%3D%221.1%22%20id%3D%22x32%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20viewBox%3D%220%200%20512%20512%22%20xml%3Aspace%3D%22preserve%22%20fill%3D%22%23000000%22%3E%3Cg%20id%3D%22SVGRepo_bgCarrier%22%20stroke-width%3D%220%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_tracerCarrier%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3C%2Fg%3E%3Cg%20id%3D%22SVGRepo_iconCarrier%22%3E%20%3Cstyle%20type%3D%22text%2Fcss%22%3E%20.st0%7Bfill%3A%23ffffff%3B%7D%20%3C%2Fstyle%3E%20%3Cg%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M435.95%2C287.525c32.51%2C0%2C58.87-26.343%2C58.87-58.853c0-32.51-26.361-58.871-58.87-58.871%20c-32.502%2C0-58.863%2C26.361-58.863%2C58.871C377.088%2C261.182%2C403.448%2C287.525%2C435.95%2C287.525z%22%3E%3C%2Fpath%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M511.327%2C344.251c-2.623-15.762-15.652-37.822-25.514-47.677c-1.299-1.306-7.105-1.608-8.673-0.636%20c-11.99%2C7.374-26.074%2C11.714-41.19%2C11.714c-15.099%2C0-29.184-4.34-41.175-11.714c-1.575-0.972-7.373-0.67-8.672%2C0.636%20c-2.757%2C2.757-5.765%2C6.427-8.698%2C10.683c7.935%2C14.94%2C14.228%2C30.81%2C16.499%2C44.476c2.27%2C13.7%2C1.533%2C26.67-2.138%2C38.494%20c13.038%2C4.717%2C28.673%2C6.787%2C44.183%2C6.787C476.404%2C397.014%2C517.804%2C382.987%2C511.327%2C344.251z%22%3E%3C%2Fpath%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M254.487%2C262.691c52.687%2C0%2C95.403-42.716%2C95.403-95.402c0-52.67-42.716-95.386-95.403-95.386%20c-52.678%2C0-95.378%2C42.716-95.378%2C95.386C159.109%2C219.975%2C201.808%2C262.691%2C254.487%2C262.691z%22%3E%3C%2Fpath%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M335.269%2C277.303c-2.07-2.061-11.471-2.588-14.027-1.006c-19.448%2C11.966-42.271%2C18.971-66.755%2C18.971%20c-24.466%2C0-47.3-7.005-66.738-18.971c-2.555-1.583-11.956-1.055-14.026%2C1.006c-16.021%2C16.004-37.136%2C51.782-41.384%2C77.288%20c-10.474%2C62.826%2C56.634%2C85.508%2C122.148%2C85.508c65.532%2C0%2C132.639-22.682%2C122.165-85.508%20C372.404%2C329.085%2C351.289%2C293.307%2C335.269%2C277.303z%22%3E%3C%2Fpath%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M76.049%2C287.525c32.502%2C0%2C58.862-26.343%2C58.862-58.853c0-32.51-26.36-58.871-58.862-58.871%20c-32.511%2C0-58.871%2C26.361-58.871%2C58.871C17.178%2C261.182%2C43.538%2C287.525%2C76.049%2C287.525z%22%3E%3C%2Fpath%3E%20%3Cpath%20class%3D%22st0%22%20d%3D%22M115.094%2C351.733c2.414-14.353%2C9.225-31.253%2C17.764-46.88c-2.38-3.251-4.759-6.083-6.955-8.279%20c-1.299-1.306-7.097-1.608-8.672-0.636c-11.991%2C7.374-26.076%2C11.714-41.182%2C11.714c-15.108%2C0-29.202-4.34-41.183-11.714%20c-1.568-0.972-7.382-0.67-8.681%2C0.636c-9.887%2C9.854-22.882%2C31.915-25.514%2C47.677c-6.468%2C38.736%2C34.924%2C52.762%2C75.378%2C52.762%20c14.437%2C0%2C29.016-1.777%2C41.459-5.84C113.587%2C379.108%2C112.757%2C365.835%2C115.094%2C351.733z%22%3E%3C%2Fpath%3E%20%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Team">Team</a>
+  </nav>
+
+<nav id="floating-nav">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#veritas">Veritas</a>
+  <a href="#team">Team</a>
+</nav>
+
+    <div id="main-logo-container">
+      <img id="main-logo" src="C:\Users\Bhargavi Chaudhary\OneDrive\Desktop\Bhargavi_Codes\Hackx\main_head.png" width="500" height="100">
+    </div>
+    <br><br>
+
+    <p class="subhead" id="subhead-text">
+      AI-powered pre-consultation assistant collecting structured clinical histories for faster, safer consultations.
+    </p>
+    <a href="#" class="cta-button"><span>Try Veritas!</span></a>
+  </div>
+
+  <br><br>
+</section>
+
+<section>
+    <div class="problem-solution">
+    <div class="card">
+      <h2>The Challenge</h2>
+      <p>Doctors spend up to 40% of consultation time collecting patient history, leaving limited time for diagnosis and treatment planning. This inefficiency affects both healthcare quality and patient satisfaction, creating a bottleneck in modern medical practice.</p>
+    </div>
+
+    <div class="card">
+      <h2>Our Solution</h2>
+      <p>Veritas is an AI-powered clinical assistant that conducts comprehensive pre-consultation interviews, gathering patient and family medical history through natural conversation. By the time patients see their doctor, a complete, structured history is ready for review.</p>
+    </div>
+  </div>
+
+<br><br><br>
+
+
+<section>
+    <div id="new-element">
+      <img id="graphic" src="C:\Users\Bhargavi Chaudhary\OneDrive\Desktop\Bhargavi_Codes\Hackx\robot (1).png">
+    </div>
+    <br><br>
+</section>
+
+<div id="new-element-2">
+      <img id="graphic-2" src="C:\Users\Bhargavi Chaudhary\OneDrive\Desktop\Bhargavi_Codes\Hackx\graphic (1).png">
+    </div>
+
+    <div id="new-element-3">
+      <img id="graphic-3" src="C:\Users\Bhargavi Chaudhary\OneDrive\Desktop\Bhargavi_Codes\Hackx\graphic (2).png">
+    </div>
+
+    <div id="new-element-4">
+      <img id="graphic-4" src="C:\Users\Bhargavi Chaudhary\OneDrive\Desktop\Bhargavi_Codes\Hackx\graphic.png">
+    </div>
+
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+
+  <div class="features">
+    <h2>Core Capabilities</h2>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">AI</div>
+        <h3>Intelligent Conversations</h3>
+        <p>Natural language processing adapts to each patient's communication style, asking relevant follow-up questions based on symptoms described.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">EHR</div>
+        <h3>Structured Data</h3>
+        <p>Automatically converts conversations into standardized, EHR-compatible formats that integrate seamlessly with existing hospital systems.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">V/T</div>
+        <h3>Multi-Modal Input</h3>
+        <p>Supports both voice and text interactions, allowing patients to communicate in their preferred method for maximum accessibility.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">S</div>
+        <h3>Clinical Summaries</h3>
+        <p>Generates concise, actionable summaries highlighting critical information for rapid physician review before consultation.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">L</div>
+        <h3>Privacy First</h3>
+        <p>Built with healthcare compliance at its core, ensuring full HIPAA adherence and encrypted data handling throughout the process.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">E</div>
+        <h3>Empathetic Design</h3>
+        <p>Emotion recognition technology adjusts conversation tone and pacing, creating a supportive environment for patients discussing sensitive health issues.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="interactive-demo">
+    <h2>How It Works?</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-number">1</div>
+        <div class="timeline-content">
+          <h3>Patient Arrives</h3>
+          <p>Before seeing the doctor, patients interact with Veritas via tablet, phone, or computer in the waiting room or from home.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-number">2</div>
+        <div class="timeline-content">
+          <h3>Guided Interview</h3>
+          <p>Veritas conducts a comprehensive interview covering current symptoms, medical history, medications, allergies, and family health background.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-number">3</div>
+        <div class="timeline-content">
+          <h3>Smart Analysis</h3>
+          <p>AI processes the conversation, identifying key patterns, red flags, and relevant historical factors that require physician attention.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-number">4</div>
+        <div class="timeline-content">
+          <h3>Doctor Reviews</h3>
+          <p>Physician receives a structured summary with highlighted priorities, allowing them to focus consultation time on diagnosis and treatment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="veritas-section" style="margin-top: 80px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+  <h2 style="font-size: 1.8rem; color: var(--mint); text-align: center; margin-bottom: 20px;">Veritas Chatbot</h2>
+  <p style="max-width: 700px; text-align: center; font-size: 1.1rem; color: var(--off-white); margin-bottom: 30px;">
+    Experience the C-DAC AI chatbot in action — designed to collect your clinical history securely and prepare doctors ahead of consultations.
+  </p>
+
+  <div style="width: 90%; max-width: 900px; height: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 0 25px rgba(131, 197, 190, 0.6); border: 2px solid var(--teal-light);">
+    <iframe 
+      src="https://veritaschat.netlify.app/" 
+      width="100%" 
+      height="100%" 
+      style="border: none; background-color: #001417;">
+    </iframe>
+  </div>
+</section>
+
+
+  <script>
+
+const nav = document.querySelector("nav");
+  const hero = document.querySelector("#hero-section");
+
+  window.addEventListener("scroll", () => {
+    const heroBottom = hero.offsetTop + hero.offsetHeight;
+    if (window.scrollY > heroBottom - 100) {
+      nav.classList.add("show");
+    } else {
+      nav.classList.remove("show");
+    }
+  });
+
+const mainNav = document.querySelector("nav"); // main navbar inside header
+  const floatingNav = document.querySelector("#floating-nav");
+
+  window.addEventListener("scroll", () => {
+    const mainNavBottom = mainNav.offsetTop + mainNav.offsetHeight;
+
+    if (window.scrollY > mainNavBottom + 20) {
+      floatingNav.classList.add("show");
+    } else {
+      floatingNav.classList.remove("show");
+    }
+  });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const logoContainer = document.getElementById('main-logo-container');
+      const subhead = document.getElementById('subhead-text');
+      const textToType = subhead.textContent;
+      subhead.textContent = '';
+
+      let charIndex = 0;
+      const typingSpeed = 1000 / 35; // Approx 60 WPM
+      const delayBeforeTyping = 1000;
+
+      logoContainer.style.opacity = 0;
+      setTimeout(() => {
+        logoContainer.style.transition = 'opacity 1s ease-in-out';
+        logoContainer.style.opacity = 1;
+      }, 10);
+
+      function typeCharacter() {
+        if (charIndex < textToType.length) {
+          subhead.textContent += textToType.charAt(charIndex);
+          charIndex++;
+          setTimeout(typeCharacter, typingSpeed);
+        } else {
+          subhead.classList.remove('typing');
+        }
+      }
+
+      function startTypeWriter() {
+        subhead.classList.add('typing');
+        typeCharacter();
+      }
+
+      setTimeout(startTypeWriter, delayBeforeTyping);
+
+      const box = document.querySelector('.scroll-box');
+      const text = document.querySelector('.scroll-text');
+      const textWidth = text.scrollWidth;
+      const boxWidth = box.clientWidth;
+
+      box.addEventListener('mousemove', (e) => {
+        const rect = box.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const movePercent = x / rect.width;
+        const maxMove = textWidth - boxWidth;
+        text.style.transform = `translateX(-${movePercent * maxMove}px)`;
+      });
+    });
+  </script>
+</body>
+</html>
