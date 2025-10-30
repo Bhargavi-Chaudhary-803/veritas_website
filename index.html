@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veritas - Clinical Assistant</title>
+    <link rel="icon" type="image/png" href="image/veritasai.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    /* Base styles for a clean, modern look */
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+    
+    /* --- CUSTOM VERITAS THEME COLORS (Applied Directly) --- */
+    /* Primary Color: #006D77 */
+    .theme-primary-bg {
+        background-color: #006D77 !important;
+    }
+    
+    /* Darker shade for hover effect on the Send button: #005B66 */
+    #send-button {
+        background-color: #006D77 !important;
+        transition: background-color 0.15s ease-in-out;
+    }
+    #send-button:hover {
+        background-color: #005B66 !important; 
+    }
+
+    /* New Chat Button Hover */
+    #new-chat-button {
+        transition: background-color 0.15s ease-in-out;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    #new-chat-button:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+    /* --- END CUSTOM COLORS --- */
+    
+    body {
+        font-family: 'Raleway', sans-serif;
+        background-color: #83C5BE !important; /* Light teal background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .chat-container {
+        width: 100%;
+        max-width: 700px;
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    #chat-window {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 24px;
+        background-color: #f9fafb; /* Off-white chat area */
+        display: flex;
+        flex-direction: column;
+        gap: 16px; /* Controls spacing BETWEEN messages */
+    }
+    
+    /* Message Bubble Styling - General */
+    .chat-bubble-container {
+        position: relative; 
+        display: flex;
+        align-items: flex-start;
+        max-width: 85%; /* Limits the ENTIRE container (icon + bubble) width */
+    }
+    
+    .chat-bubble {
+        padding: 12px 18px;
+        border-radius: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        word-wrap: break-word;
+        line-height: 1.5;
+        width: fit-content; 
+        max-width: 100%;
+    }
+
+    /* Typing Indicator */
+    #typing-indicator {
+        align-self: flex-start;
+        color: #6b7280;
+        font-style: italic;
+    }
+
+    /* --- ICON INJECTION AND MESSAGE STYLES (Fixed) --- */
+
+    /* Universal Icon Sizing */
+    .icon-size {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        position: absolute;
+        top: 50%; 
+        transform: translateY(-50%);
+    }
+
+    /* --- BOT STYLES (Icon on Left) --- */
+    .bot-container {
+        padding-left: 45px; /* Space for the icon */
+    }
+
+    .bot-container::before {
+        content: "";
+        left: 0; 
+        /* FIX: Ensures image is loaded and container is visible */
+        background-image: url('image/bot.png'); 
+        background-color: #e0f2f7;
+        border: 2px solid #006D77;
+        /* Apply icon-size utility properties */
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        position: absolute;
+        top: 50%; 
+        transform: translateY(-50%);
+    }
+
+    .bot-message {
+        background-color: #e0f2f7; 
+        color: #1f2937; 
+        border: 1px solid #d1d5db; 
+        border-radius: 1.25rem;
+        border-top-left-radius: 0.5rem; 
+    }
+
+
+    /* --- USER STYLES (Icon on Right) --- */
+    .user-container {
+        justify-content: flex-end; /* Aligns content (bubble and icon) to the right */
+        margin-left: auto; /* Pushes the entire container to the far right */
+        padding-right: 45px; /* Space for the icon */
+        flex-direction: row; 
+    }
+
+    .user-container::after {
+        content: "";
+        right: 0; 
+        /* FIX: Ensures image is loaded and container is visible */
+        background-image: url('image/user.png'); 
+        background-color: #d1fae5;
+        border: 2px solid #3b82f6; 
+        /* Apply icon-size utility properties */
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        position: absolute;
+        top: 50%; 
+        transform: translateY(-50%);
+    }
+
+    .user-message {
+        background-color: #3b82f6; 
+        color: white; 
+        border-radius: 1.25rem;
+        border-top-right-radius: 0.5rem; 
+    }
+    
+    /* New: Microphone Button Styles */
+    #mic-button {
+        transition: background-color 0.15s ease-in-out;
+    }
+    .recording {
+        background-color: #ef4444 !important; /* Red-500 when recording */
+        animation: pulse-red 1s infinite;
+    }
+    @keyframes pulse-red {
+        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <header class="theme-primary-bg text-white p-4 shadow-lg flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-bold">⚕️ Veritas - Clinical Assistant</h1>
+            <p class="text-sm opacity-80">Collecting Pre-Consultation Patient History</p>
+        </div>
+        <button 
+            id="new-chat-button" 
+            class="bg-white/10 hover:bg-white/20 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out"
+            title="Start a new conversation"
+        >
+            New Chat
+        </button>
+    </header>
+
+    <div id="chat-window">
+        </div>
+
+    <div class="p-4 bg-white border-t flex flex-col gap-3">
+        <div id="typing-indicator" class="hidden text-sm text-gray-500">
+            <span class="inline-block h-3 w-3 bg-blue-500 rounded-full animate-pulse mr-2"></span>
+            Assistant is thinking...
+        </div>
+        <form id="chat-form" class="flex">
+            <input 
+                type="text"
+                id="message-input"
+                placeholder="Enter your main symptom (e.g., Headache, Fever)..." 
+                class="flex-grow p-3 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+                autocomplete="off"
+                required
+            />
+            <button
+                type="button"
+                id="mic-button"
+                class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-4 shadow-md transition duration-150 ease-in-out disabled:opacity-50"
+                title="Start Voice Input"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path d="M8.25 4.5a3.75 3.75 0 1 1 7.5 0v8.25a3.75 3.75 0 1 1-7.5 0V4.5Z" />
+                    <path d="M6 12.75a.75.75 0 0 1 .75.75v1.5a5.25 5.25 0 1 0 10.5 0v-1.5a.75.75 0 0 1 1.5 0v1.5a6.75 6.75 0 0 1-13.5 0v-1.5a.75.75 0 0 1 .75-.75Z" />
+                </svg>
+            </button>
+            <button
+                type="submit"
+                id="send-button"
+                class="text-white font-semibold py-3 px-6 rounded-r-xl shadow-md transition duration-150 ease-in-out disabled:opacity-50" 
+            >
+                Send
+            </button>
+        </form>
+    </div>
+</div>
+<script>
+    // Get DOM elements
+    const chatWindow = document.getElementById('chat-window');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message-input');
+    const typingIndicator = document.getElementById('typing-indicator');
+    const micButton = document.getElementById('mic-button');
+    const sendButton = document.getElementById('send-button');
+    // Get the New Chat button
+    const newChatButton = document.getElementById('new-chat-button');
+
+
+    // ---
+    // !!! IMPORTANT !!!
+    // This URL must be updated to your live Flask backend URL on Render.
+    // Replace the placeholder with your actual URL (e.g., https://your-app-name.onrender.com)
+    // ---
+    const API_BASE_URL = 'https://chatbot-78y3.onrender.com'; // <<< UPDATE THIS BASE URL
+
+    // --- User ID Management for Supabase Persistence ---
+    let USER_ID = localStorage.getItem('veritas_user_id');
+    if (!USER_ID) {
+        // Generate a new UUID if none exists
+        USER_ID = crypto.randomUUID();
+        localStorage.setItem('veritas_user_id', USER_ID);
+        console.log(`New user ID generated: ${USER_ID}`);
+    } else {
+        console.log(`Existing user ID loaded: ${USER_ID}`);
+    }
+
+    let conversation = [];
+
+    // ====================================================================
+    // 🎤 VOICE INPUT SETUP (Web Speech API) - (Code omitted for brevity, assumed to work)
+    // ====================================================================
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        micButton.addEventListener('click', () => {
+            try {
+                recognition.start();
+                micButton.classList.add('recording');
+                micButton.title = 'Recording... Speak now!';
+                messageInput.placeholder = '🎙️ Recording... Please state your symptoms clearly.'; 
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+            } catch (error) {
+                if (error.name === 'InvalidStateError') {
+                    recognition.stop();
+                } else {
+                    console.error("Error starting recognition:", error);
+                }
+            }
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            messageInput.value = transcript;
+            chatForm.dispatchEvent(new Event('submit'));
+        };
+
+        recognition.onend = () => {
+            micButton.classList.remove('recording');
+            micButton.title = 'Start Voice Input';
+            messageInput.placeholder = 'Enter your main symptom (e.g., Headache, Fever)...'; 
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+        };
+
+        recognition.onerror = (event) => {
+            micButton.classList.remove('recording');
+            micButton.title = 'Start Voice Input';
+            messageInput.placeholder = 'Enter your main symptom (e.g., Headache, Fever)...'; 
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+            console.error('Speech recognition error:', event.error);
+        };
+    } else {
+        micButton.style.display = 'none';
+        console.warn("Web Speech API is not supported in this browser.");
+    }
+
+
+    // ====================================================================
+    // 💬 CHAT LOGIC AND STREAMING HANDLER
+    // ====================================================================
+
+    // *** NEW FUNCTION TO HANDLE THE NON-STREAMING INITIAL MESSAGE FETCH ***
+    async function fetchInitialMessage() {
+        try {
+            // Prepare UI
+            showTypingIndicator(); 
+            
+            const response = await fetch(`${API_BASE_URL}/new_session`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: USER_ID })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to start new session: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Add the non-streaming initial bot message to the chat window
+            addMessage(data.message, 'bot'); 
+            
+        } catch (error) {
+            console.error('Error starting new session:', error);
+            // Display error if the initial message fails
+            addMessage(`❌ Error: Could not start new session. ${error.message}`, 'bot');
+        } finally {
+            // Re-enable input
+            hideTypingIndicator();
+            messageInput.disabled = false;
+            micButton.disabled = false;
+            sendButton.disabled = false;
+            messageInput.focus();
+        }
+    }
+
+
+    // Function to fetch history on load
+    async function getHistory() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/history`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: USER_ID })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to load history: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            if (data.history && Array.isArray(data.history) && data.history.length > 0) {
+                conversation = data.history;
+                renderChatHistory();
+            } else {
+                // Call the dedicated function for the initial message
+                fetchInitialMessage();
+            }
+            
+        } catch (error) {
+            console.error('Error fetching history. Starting fresh chat:', error);
+            // Fallback must also call fetchInitialMessage()
+            fetchInitialMessage();
+        }
+    }
+    
+    // Function to render the entire history array to the DOM
+    function renderChatHistory() {
+        chatWindow.innerHTML = ''; // Clear existing messages
+        conversation.forEach(msg => {
+            const text = msg.parts ? msg.parts[0].text : msg.text; // Adapt to Flask output format
+            const sender = msg.role === 'model' ? 'bot' : 'user';
+            
+            // Re-render using addMessage function
+            addMessage(text, sender);
+        });
+        scrollToBottom();
+    }
+
+
+    // Function to handle the streaming API call and display
+    async function streamChat(message = null) {
+        
+        // 1. Prepare UI for streaming
+        showTypingIndicator();
+        
+        // Create the bot's receiving bubble and append it to the chat window
+        const botMessageContainer = document.createElement('div');
+        botMessageContainer.className = 'chat-bubble-container bot-container';
+        
+        const botMessageBubble = document.createElement('div');
+        botMessageBubble.className = 'chat-bubble bot-message';
+        
+        const botMessageText = document.createElement('p');
+        botMessageText.className = 'text-sm';
+        botMessageText.textContent = ''; // Start with empty content
+        
+        botMessageBubble.appendChild(botMessageText);
+        botMessageContainer.appendChild(botMessageBubble);
+        chatWindow.appendChild(botMessageContainer);
+        scrollToBottom();
+
+        // --- Stream execution ---
+        let fullReply = '';
+        const streamEndpoint = `${API_BASE_URL}/chat`;
+
+        try {
+            const response = await fetch(streamEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // Send the user ID and the message to the backend
+                body: JSON.stringify({ 
+                    user_id: USER_ID,
+                    message: message
+                }),
+            });
+
+            if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`Server Status ${response.status}: ${errorBody.substring(0, 200)}...`);
+            }
+
+            // Get the stream reader and decoder
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            
+            // Loop to read the stream chunks
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    break;
+                }
+                
+                // Decode the chunk of text
+                const chunk = decoder.decode(value, { stream: true });
+                
+                // Append RAW text content for smooth streaming display
+                botMessageText.textContent += chunk; 
+                fullReply += chunk;
+                
+                // Keep the chat window scrolled to the bottom
+                scrollToBottom();
+            }
+            
+            // 4. FINAL FIX: Convert markdown and apply to innerHTML once streaming is complete
+            botMessageText.innerHTML = convertMarkdownToHtml(fullReply);
+
+            // Fetch the updated history from the backend after the full exchange is done and saved
+            await getHistory(); 
+            
+        } catch (error) {
+            console.error('Error fetching bot response:', error);
+            // Display the error message in the chat window
+            botMessageText.innerHTML = `❌ Connection or Server Error: <strong>${error.message}</strong>. Please check console/logs.`;
+        } finally {
+            // 6. Re-enable inputs
+            hideTypingIndicator();
+            messageInput.disabled = false;
+            micButton.disabled = false;
+            sendButton.disabled = false;
+            messageInput.focus();
+        }
+    }
+
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+
+        const message = messageInput.value.trim();
+        if (message === '') return; 
+
+        // 1. Add user's message to the chat window (non-streaming)
+        addMessage(message, 'user');
+        
+        // 2. Clear the input field and disable inputs
+        messageInput.value = '';
+        messageInput.disabled = true;
+        micButton.disabled = true;
+        sendButton.disabled = true;
+
+        // 3. Start the streaming process
+        await streamChat(message);
+    });
+
+    // --- NEW CHAT FUNCTIONALITY ---
+    
+    function startNewConversation() {
+        console.log("Starting new conversation, regenerating user ID.");
+        
+        // 1. Clear the DOM messages
+        chatWindow.innerHTML = '';
+        
+        // 2. Reset the local conversation state
+        conversation = []; 
+        
+        // Regenerate a brand new user ID for a fresh Supabase entry
+        USER_ID = crypto.randomUUID();
+        localStorage.setItem('veritas_user_id', USER_ID);
+        console.log(`New user ID generated for session: ${USER_ID}`);
+
+        // Call the dedicated function for the initial message
+        fetchInitialMessage();
+    }
+    
+    // Event listener for the new button
+    newChatButton.addEventListener('click', startNewConversation);
+    // --- END NEW CHAT FUNCTIONALITY ---
+
+
+    // --- Helper Functions ---
+    
+    function convertMarkdownToHtml(markdownText) {
+        let htmlText = markdownText;
+
+        // 1. Convert bold: **text** or __text__ to <strong>text</strong>
+        htmlText = htmlText.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        htmlText = htmlText.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+
+        // 2. Convert italics: *text* or _text_ to <em>text</em>
+        htmlText = htmlText.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        htmlText = htmlText.replace(/_([^_]+)_/g, '<em>$1</em>');
+        
+        // 3. Convert inline code: `code` to <code>code</code>
+        htmlText = htmlText.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+        // 4. Convert newlines (\n) to <br> for proper line breaks
+        htmlText = htmlText.replace(/\n/g, '<br>');
+
+        return htmlText;
+    }
+
+
+    function addMessage(text, sender) {
+        const messageContainer = document.createElement('div');
+        messageContainer.className = `chat-bubble-container ${sender === 'user' ? 'user-container' : 'bot-container'}`;
+
+        const messageBubble = document.createElement('div');
+        messageBubble.className = `chat-bubble ${sender}-message`;
+        
+        const messageText = document.createElement('p');
+        messageText.className = 'text-sm';
+        
+        if (sender === 'bot') {
+            // Apply markdown conversion for messages
+            messageText.innerHTML = convertMarkdownToHtml(text);
+        } else {
+            // Keep textContent for user messages to prevent HTML injection
+            messageText.textContent = text;
+        }
+
+        messageBubble.appendChild(messageText);
+        // Note: Icon is handled via CSS pseudo-elements
+        messageContainer.appendChild(messageBubble); 
+        chatWindow.appendChild(messageContainer);
+        
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        typingIndicator.classList.remove('hidden');
+        scrollToBottom();
+    }
+
+    function hideTypingIndicator() {
+        typingIndicator.classList.add('hidden');
+    }
+    
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', getHistory);
+</script>
+</body>
+</html>
