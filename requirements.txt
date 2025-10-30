@@ -1,0 +1,7 @@
+Flask
+requests
+flask-cors
+google-generativeai>=0.6.0
+gunicorn
+gevent
+supabase
