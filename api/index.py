@@ -2,7 +2,6 @@ import os
 import sys
 from flask import Flask, request, Response, stream_with_context
 from flask_cors import CORS
-from supabase import create_client, Client
 from groq import Groq
 
 app = Flask(__name__)
@@ -10,17 +9,11 @@ CORS(app)  # Allows your frontend to make safe cross-origin API calls
 
 # Vercel handles masking your production credentials seamlessly 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
 groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
-supabase_client: Client = None
-if SUPABASE_URL and SUPABASE_KEY:
-    try:
-        supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    except Exception as e:
-        print(f"Supabase init warning: {e}", file=sys.stderr)
+if not GROQ_API_KEY:
+    print("❌ ERROR: GROQ_API_KEY environment variable is missing!", file=sys.stderr)
 
 # STRICT MEDICAL GUARDFRAILS SYSTEM PROMPT
 MEDICAL_SYSTEM_PROMPT = {
@@ -42,6 +35,7 @@ MEDICAL_SYSTEM_PROMPT = {
     )
 }
 
+# Vercel's Python runtime requires explicit mapping for Flask root endpoints
 @app.route("/api/health", methods=["GET"])
 def health_check():
     return {"status": "healthy", "message": "⚡ Veritas Medical API is fully live on Vercel ⚡"}, 200
@@ -58,11 +52,7 @@ def chat():
     if not incoming_messages:
         return {"error": "Messages array required"}, 400
 
-    # Prepend the strict medical context system prompt at position 0
-    # to enforce behavioral rules on Groq execution context
     formatted_messages = [MEDICAL_SYSTEM_PROMPT] + incoming_messages
-
-    # Recommended fast reasoning model for clinical conversational profiling
     model = data.get("model", "llama-3.3-70b-versatile")
 
     def generate():
@@ -80,3 +70,6 @@ def chat():
             yield f"\n[Backend Error: {str(e)}]"
 
     return Response(stream_with_context(generate()), content_type="text/plain")
+
+# REQUIRED FOR VERCEL: Expose app handler directly
+handler = app
