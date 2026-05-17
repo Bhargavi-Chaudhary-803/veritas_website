@@ -266,14 +266,18 @@
     .stat-pill {
       background: var(--glass); border:1px solid var(--glass-border);
       backdrop-filter:blur(12px); border-radius:16px;
-      padding:14px 24px; text-align:center;
+      padding:16px 20px; text-align:center;
+      width:160px; flex-shrink:0;
     }
     .stat-pill .num {
-      display:block; font-family:var(--font-display); font-size:2.1rem; font-weight:600; color:var(--mint); line-height:1;
+      display:block; font-family:var(--font-display); font-size:2.1rem; font-weight:600;
+      color:var(--mint); line-height:1; white-space:nowrap;
+      letter-spacing:.02em;
     }
     .stat-pill .lbl {
-      display:block; font-size:.72rem; font-weight:400; letter-spacing:.1em;
-      text-transform:uppercase; color:var(--teal-light); margin-top:5px;
+      display:block; font-size:.68rem; font-weight:400; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--teal-light); margin-top:7px;
+      white-space:nowrap;
     }
 
     /* scroll indicator */
@@ -694,16 +698,16 @@
 
     <div class="hero-stats">
       <div class="stat-pill">
-        <span class="num" data-target="40">0</span><span class="stat-suffix">%</span></span>
-        <span class="lbl"> Less Consultation Time</span>
+        <span class="num"><span data-target="40">0</span>%</span>
+        <span class="lbl">Less Consult Time</span>
       </div>
       <div class="stat-pill">
-        <span class="num" data-target="98">0</span><span class="stat-suffix">%</span></span>
-        <span class="lbl"> Data Accuracy</span>
+        <span class="num"><span data-target="98">0</span>%</span>
+        <span class="lbl">Data Accuracy</span>
       </div>
       <div class="stat-pill">
-        <span class="num" data-target="24">0</span><span class="stat-suffix">/7</span></span>
-        <span class="lbl"> Availability</span>
+        <span class="num"><span data-target="24">0</span> / 7</span>
+        <span class="lbl">Availability</span>
       </div>
     </div>
   </div>
@@ -1006,7 +1010,7 @@ function animateCounter(el) {
 const counterObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if(e.isIntersecting){
-      e.target.querySelectorAll('.counter,[data-target]').forEach(animateCounter);
+      e.target.querySelectorAll('[data-target]').forEach(animateCounter);
       counterObs.unobserve(e.target);
     }
   });
