@@ -441,7 +441,11 @@
       background: linear-gradient(135deg, rgba(0,109,119,.8), rgba(131,197,190,.3));
       border:1px solid rgba(131,197,190,.25);
       display:flex; align-items:center; justify-content:center;
-      font-size:1.4rem; margin-bottom:22px;
+      margin-bottom:22px;
+    }
+    .feat-icon-wrap svg {
+      width:22px; height:22px;
+      stroke: var(--mint); stroke-width:1.75; fill:none;
     }
 
     .feat-cell h3 {
@@ -453,9 +457,11 @@
     }
     .feat-arrow {
       position:absolute; bottom:24px; right:28px;
-      font-size:1.2rem; color:rgba(131,197,190,.3);
+      display:flex; align-items:center; justify-content:center;
+      color:rgba(131,197,190,.3);
       transition:color .3s, transform .3s;
     }
+    .feat-arrow svg { width:18px; height:18px; stroke:currentColor; stroke-width:1.75; fill:none; }
     .feat-cell:hover .feat-arrow { color:var(--mint); transform:translate(4px,-4px); }
 
     /* ═══════════════════════════════════════════════════════
@@ -632,6 +638,7 @@
     #new-element-4 { display:none; }
 
   </style>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
 
@@ -768,8 +775,8 @@
         <p>An AI-powered clinical assistant that runs comprehensive pre-consultation interviews — gathering patient and family medical history through natural conversation. By appointment time, a complete, structured history awaits the physician.</p>
       </div>
     </div>
-    
-  <!-- Features Grid -->
+
+      <!-- Features Grid -->
   <div class="features-section">
     <div class="section-wrap">
       <div class="features-header reveal">
@@ -780,45 +787,45 @@
       <div class="features-grid">
 
         <div class="feat-cell reveal">
-          <div class="feat-icon-wrap">🧠</div>
+          <div class="feat-icon-wrap"><i data-lucide="brain"></i></div>
           <h3>Intelligent Conversations</h3>
           <p>Natural language processing adapts to each patient's communication style, asking relevant follow-up questions based on symptoms described.</p>
-          <span class="feat-arrow">↗</span>
+          <span class="feat-arrow"><i data-lucide="arrow-up-right"></i></span>
         </div>
 
         <div class="feat-cell reveal" style="transition-delay:.1s">
-          <div class="feat-icon-wrap">📋</div>
+          <div class="feat-icon-wrap"><i data-lucide="clipboard-list"></i></div>
           <h3>Structured Data Output</h3>
           <p>Automatically converts conversations into standardized, EHR-compatible formats that integrate seamlessly with existing hospital systems.</p>
-          <span class="feat-arrow">↗</span>
+          <span class="feat-arrow"><i data-lucide="arrow-up-right"></i></span>
         </div>
 
         <div class="feat-cell reveal" style="transition-delay:.2s">
-          <div class="feat-icon-wrap">🎙️</div>
+          <div class="feat-icon-wrap"><i data-lucide="mic"></i></div>
           <h3>Multi-Modal Input</h3>
           <p>Supports both voice and text interactions, letting patients communicate in their preferred mode for maximum accessibility and comfort.</p>
-          <span class="feat-arrow">↗</span>
+          <span class="feat-arrow"><i data-lucide="arrow-up-right"></i></span>
         </div>
 
         <div class="feat-cell reveal" style="transition-delay:.3s">
-          <div class="feat-icon-wrap">📊</div>
+          <div class="feat-icon-wrap"><i data-lucide="file-bar-chart-2"></i></div>
           <h3>Clinical Summaries</h3>
           <p>Generates concise, actionable summaries highlighting critical information for rapid physician review before consultation begins.</p>
-          <span class="feat-arrow">↗</span>
+          <span class="feat-arrow"><i data-lucide="arrow-up-right"></i></span>
         </div>
 
         <div class="feat-cell reveal" style="transition-delay:.4s">
-          <div class="feat-icon-wrap">🔒</div>
+          <div class="feat-icon-wrap"><i data-lucide="shield-check"></i></div>
           <h3>Privacy First</h3>
           <p>Built with healthcare compliance at its core — full HIPAA adherence and encrypted data handling throughout the entire process.</p>
-          <span class="feat-arrow">↗</span>
+          <span class="feat-arrow"><i data-lucide="arrow-up-right"></i></span>
         </div>
 
         <div class="feat-cell reveal" style="transition-delay:.5s">
-          <div class="feat-icon-wrap">💚</div>
+          <div class="feat-icon-wrap"><i data-lucide="heart-handshake"></i></div>
           <h3>Empathetic Design</h3>
           <p>Emotion recognition adjusts conversation tone and pacing, creating a supportive environment for patients discussing sensitive health issues.</p>
-          <span class="feat-arrow">↗</span>
+          <span class="feat-arrow"><i data-lucide="arrow-up-right"></i></span>
         </div>
 
       </div>
@@ -923,6 +930,9 @@
 
 <!-- ═══════════════ SCRIPTS ═══════════════ -->
 <script>
+/* ── Lucide Icons ─────────────────────────────── */
+lucide.createIcons();
+
 /* ── Custom Cursor ────────────────────────────── */
 const ring = document.getElementById('cursor-ring');
 const dot  = document.getElementById('cursor-dot');
