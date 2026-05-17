@@ -5,17 +5,14 @@ from flask_cors import CORS
 from groq import Groq
 
 app = Flask(__name__)
-CORS(app)  # Allows your frontend to make safe cross-origin API calls
+CORS(app)
 
-# Vercel handles masking your production credentials seamlessly 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
 groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 if not GROQ_API_KEY:
     print("❌ ERROR: GROQ_API_KEY environment variable is missing!", file=sys.stderr)
 
-# STRICT MEDICAL GUARDFRAILS SYSTEM PROMPT
 MEDICAL_SYSTEM_PROMPT = {
     "role": "system",
     "content": (
@@ -35,7 +32,7 @@ MEDICAL_SYSTEM_PROMPT = {
     )
 }
 
-# Vercel's Python runtime requires explicit mapping for Flask root endpoints
+
 @app.route("/api/health", methods=["GET"])
 def health_check():
     return {"status": "healthy", "message": "⚡ Veritas Medical API is fully live on Vercel ⚡"}, 200
@@ -48,13 +45,14 @@ def chat():
 
     data = request.json or {}
     incoming_messages = data.get("messages", [])
-    
+
     if not incoming_messages:
         return {"error": "Messages array required"}, 400
 
     formatted_messages = [MEDICAL_SYSTEM_PROMPT] + incoming_messages
     model = data.get("model", "llama-3.3-70b-versatile")
 
+    # Streaming — works on Vercel Pro. Falls back gracefully on Hobby (response buffered).
     def generate():
         try:
             completion = groq_client.chat.completions.create(
@@ -70,6 +68,3 @@ def chat():
             yield f"\n[Backend Error: {str(e)}]"
 
     return Response(stream_with_context(generate()), content_type="text/plain")
-
-# REQUIRED FOR VERCEL: Expose app handler directly
-handler = app
