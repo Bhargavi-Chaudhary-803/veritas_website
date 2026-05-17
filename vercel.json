@@ -2,14 +2,8 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "destination": "/api/index"
     }
-  ],
-  "functions": {
-    "api/index.py": {
-      "runtime": "python3.12",
-      "maxDuration": 60
-    }
-  }
+  ]
 }
