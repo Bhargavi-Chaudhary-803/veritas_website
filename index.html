@@ -116,7 +116,8 @@
 
     #typing-indicator {
       font-style: italic;
-      color: gray;
+      color: #006d77;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -144,14 +145,15 @@
   <!-- INPUT -->
   <div class="p-4 bg-white border-t flex flex-col gap-3">
 
-    <div id="typing-indicator" class="hidden">
-      Veritas is typing...
+    <!-- DYNAMIC STATUS TEXT OBJECT -->
+    <div id="typing-indicator" class="hidden flex items-center gap-2">
+      <span class="animate-pulse">⏳</span> <span id="status-text">Veritas is initializing...</span>
     </div>
 
     <form id="chat-form" class="flex">
       <input id="message-input"
         type="text"
-        placeholder="Enter your main symptom..."
+        placeholder="Type a message to start the chat..."
         class="flex-grow p-3 border rounded-l-xl"
         required />
 
@@ -169,29 +171,26 @@
   const chatForm = document.getElementById("chat-form");
   const messageInput = document.getElementById("message-input");
   const typingIndicator = document.getElementById("typing-indicator");
+  const statusText = document.getElementById("status-text");
   const newChatButton = document.getElementById("new-chat-button");
 
-  // Relative routing strategy: Works natively whether on localhost or live production
-  // Note: If your backend is in a completely separate Vercel project, change this to:
-  // const API_URL = "https://your-backend-project-name.vercel.app/api/chat";
   const API_URL = "/api/chat";
-
-  // Retain conversational context state arrays to feed the Large Language Model context window
   let messageHistory = [];
 
   function scrollToBottom() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
-  function showTyping() {
+  // Update status wrapper to output what the system engine is executing
+  function showStatus(text) {
+    statusText.innerText = text;
     typingIndicator.classList.remove("hidden");
   }
 
-  function hideTyping() {
+  function hideStatus() {
     typingIndicator.classList.add("hidden");
   }
 
-  // Inject standard static initial message or handle greeting setup locally
   function displayGreeting() {
     const defaultGreeting = "Hello, I am Veritas, your Pre-Consultation Clinical Assistant. Please describe your main symptoms or health concerns in detail so I can help prepare an organized medical history summary for your doctor.";
     addMessage(defaultGreeting, "bot");
@@ -211,15 +210,20 @@
     chatWindow.appendChild(container);
 
     scrollToBottom();
-    return bubble; // Returns the bubble element reference to handle text streaming insertion
+    return bubble;
   }
 
-  // Real-time Text Streaming Handler using JavaScript Fetch Streams Engine
   async function sendChat(userText) {
-    showTyping();
-
-    // Push new statement into context array
+    // Stage 1: Thinking and Analyzing Input
+    showStatus("Veritas is thinking...");
     messageHistory.push({ role: "user", content: userText });
+
+    // Switch state after 1.2 seconds to simulate analyzing context before hitting endpoint
+    setTimeout(() => {
+      if(!typingIndicator.classList.contains("hidden") && statusText.innerText === "Veritas is thinking...") {
+        showStatus("Veritas is analyzing medical context...");
+      }
+    }, 1200);
 
     try {
       const response = await fetch(API_URL, {
@@ -231,20 +235,22 @@
         })
       });
 
-      hideTyping();
-
       if (!response.ok) {
         throw new Error("Could not connect to the clinical backend server.");
       }
 
-      // Initialize the clean bot message bubble target for streaming chunks
+      // Stage 2: Processing Complete, actively preparing output response data streams
+      showStatus("Veritas is synthesizing clinical evaluation...");
+
       const botBubble = addMessage("", "bot");
       let fullBotResponse = "";
 
-      // Stream evaluation reader 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let done = false;
+
+      // First chunk arrived, drop the processing status wrapper completely
+      let isFirstChunk = true;
 
       while (!done) {
         const { value, done: readerDone } = await reader.read();
@@ -253,16 +259,19 @@
         const chunkText = decoder.decode(value, { stream: !done });
         fullBotResponse += chunkText;
         
-        // Render current stream text real-time down to UI
+        if (isFirstChunk && chunkText.trim().length > 0) {
+          hideStatus(); // Clear thinking text once stream starts typing out
+          isFirstChunk = false;
+        }
+
         botBubble.innerHTML = fullBotResponse.replace(/\n/g, "<br>");
         scrollToBottom();
       }
 
-      // Commit finalized assistant context chunk back to history
       messageHistory.push({ role: "assistant", content: fullBotResponse });
 
     } catch (error) {
-      hideTyping();
+      hideStatus();
       addMessage("⚠️ System Error: Unable to fetch response from backend.", "bot");
       console.error("Streaming error:", error);
     }
